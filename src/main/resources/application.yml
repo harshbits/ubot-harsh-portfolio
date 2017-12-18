@@ -5,13 +5,8 @@ info:
     description: ubot-harsh-portfolio
     version: '@project.version@'
 
-management:
-  port: 12121
-  security:
-    enabled: false
-
 server:
-  port: 12121
+  port: 8080
   
 security:
   user:
