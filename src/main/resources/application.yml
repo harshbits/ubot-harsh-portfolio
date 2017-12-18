@@ -1,0 +1,31 @@
+info:
+  build:
+    artifact: ubot-harsh-portfolio
+    name: ubot-harsh-portfolio
+    description: ubot-harsh-portfolio
+    version: '@project.version@'
+
+management:
+  port: 12121
+  security:
+    enabled: false
+
+server:
+  port: 12121
+  
+security:
+  user:
+    password: null
+  basic:
+    enabled: false
+ 
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web: DEBUG
+    com.harshbits.ubot: DEBUG 
+    
+intentTypeList:
+  ignoreIntents: smalltalk
+  
+dialog-flow.auth-token: a804a1725af940f1b0a06e51f440dd84
