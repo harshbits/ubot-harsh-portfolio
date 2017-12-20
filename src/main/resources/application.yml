@@ -13,12 +13,6 @@ security:
     password: null
   basic:
     enabled: false
- 
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
-    com.harshbits.ubot: DEBUG 
     
 intentTypeList:
   ignoreIntents: smalltalk

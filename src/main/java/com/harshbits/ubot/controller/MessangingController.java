@@ -1,7 +1,5 @@
 package com.harshbits.ubot.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -28,9 +26,9 @@ public class MessangingController {
 	 * @throws Exception
 	 */
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, 
-		consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, headers = "Accept=application/json")
-	public UbotMessage processMessages(@RequestBody @Valid UbotMessage request) throws Exception {
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, 
+		consumes = MediaType.APPLICATION_JSON_VALUE, headers = "Accept=application/json")
+	public UbotMessage processMessages(@RequestBody UbotMessage request) throws Exception {
 		return messangingService.processMessage(request);
 	}
 	
