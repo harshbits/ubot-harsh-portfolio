@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -222,14 +223,17 @@ public class WeatherService {
 					city = addressMap.get("city");
 				}
 				// Default city - Configured
-				if (city == null) {
+				if (StringUtils.isBlank(city)) {
 					city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");
 				}
+			}
+			// Default city - Configured
+			if (StringUtils.isBlank(city)) {
+				city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");
 			}
 		} catch (Exception e) {
 			log.error("Handle webhook request error {}", e);
 		}
-
 		return city;
 	}
 }

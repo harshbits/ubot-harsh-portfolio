@@ -16,5 +16,8 @@ security:
     
 intentTypeList:
   ignoreIntents: smalltalk
-  
+
+http-logging:
+    url_patterns: /v1/*
+      
 dialog-flow.auth-token: e224271a102548418eac29e794706a44
