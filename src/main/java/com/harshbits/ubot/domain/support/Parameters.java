@@ -11,7 +11,8 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.harshbits.ubot.serializer.DateListDeSerializer;
+import com.harshbits.ubot.serializer.AddressDeserializer;
+import com.harshbits.ubot.serializer.DateListDeserializer;
 import com.harshbits.ubot.serializer.DateListSerializer;
 
 import lombok.AllArgsConstructor;
@@ -43,6 +44,7 @@ public class Parameters implements Serializable {
 	private String unit;
 	
 	@JsonProperty("address")
+	@JsonDeserialize(using = AddressDeserializer.class)
 	private Address address;
 
 	@JsonProperty("geo-city")
@@ -50,7 +52,7 @@ public class Parameters implements Serializable {
 
 	@JsonProperty("date-time")
 	@JsonSerialize(using = DateListSerializer.class)
-	@JsonDeserialize(using = DateListDeSerializer.class)
+	@JsonDeserialize(using = DateListDeserializer.class)
 	private List<Date> dateTime;
 
 	@JsonProperty("geo-city.original")
@@ -59,4 +61,6 @@ public class Parameters implements Serializable {
 	@JsonProperty("address.original")
 	private String addressOriginal;
 
+	@JsonProperty("condition")
+	private String condition;
 }

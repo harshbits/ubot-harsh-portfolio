@@ -3,8 +3,7 @@ package com.harshbits.ubot.domain.support;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,12 +22,18 @@ import lombok.ToString;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Address {
 
-	@SerializedName("city.original")
-	@Expose
+	@JsonProperty("city.original")
 	private String cityOriginal;
 
-	@SerializedName("city")
-	@Expose
+	@JsonProperty("city")
 	private String city;
+	
+	@JsonProperty("zip-code.original")
+	private String zipCodeOriginal;
+
+	@JsonProperty("zip-code")
+	private String zipCode;
+	
+	private String address;
 	
 }

@@ -7,8 +7,7 @@ import java.util.HashMap;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,16 +28,13 @@ public class Context implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("name")
-	@Expose
+	@JsonProperty("name")
 	private String name;
 
-	@SerializedName("parameters")
-	@Expose
+	@JsonProperty("parameters")
 	private HashMap<String, Object> parameters;
 
-	@SerializedName("lifespan")
-	@Expose
+	@JsonProperty("lifespan")
 	private long lifespan;
 
 	public Context withName(String name) {

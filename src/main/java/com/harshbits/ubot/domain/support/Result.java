@@ -41,7 +41,6 @@ public class Result implements Serializable {
 	private boolean actionIncomplete;
 
 	@JsonProperty("parameters")
-//	private HashMap<String, JsonElement> parameters;
 	private Parameters parameters;
 
 	@JsonProperty("contexts")

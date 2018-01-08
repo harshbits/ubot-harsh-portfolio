@@ -6,8 +6,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,20 +27,16 @@ public class Metadata implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("intentId")
-	@Expose
+	@JsonProperty("intentId")
 	private String intentId;
 
-	@SerializedName("webhookUsed")
-	@Expose
+	@JsonProperty("webhookUsed")
 	private String webhookUsed;
 
-	@SerializedName("webhookForSlotFillingUsed")
-	@Expose
+	@JsonProperty("webhookForSlotFillingUsed")
 	private String webhookForSlotFillingUsed;
 
-	@SerializedName("intentName")
-	@Expose
+	@JsonProperty("intentName")
 	private String intentName;
 
 	public Metadata withIntentId(String intentId) {

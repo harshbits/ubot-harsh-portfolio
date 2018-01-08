@@ -1,8 +1,10 @@
 package com.harshbits.ubot.service;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 import javax.xml.bind.JAXBException;
 
@@ -13,8 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.github.fedy2.weather.YahooWeatherService;
 import com.github.fedy2.weather.data.Channel;
+import com.github.fedy2.weather.data.Forecast;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
-import com.harshbits.ubot.constants.IntentConstant;
+import com.harshbits.ubot.constants.UbotConstants;
 import com.harshbits.ubot.domain.WebhookRequest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -31,15 +34,24 @@ public class WeatherService {
 
 	@Autowired
 	private YahooWeatherService yahooWeatherService;
+
+	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	
-//	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//	
+	protected static final SimpleDateFormat sdfDay = new SimpleDateFormat("EEEE");
+
 //	private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
 //		@Override
 //		protected SimpleDateFormat initialValue() {
 //			return sdf;
 //		}
 //	};
+	
+	private static final ThreadLocal<SimpleDateFormat> dayFormatter = new ThreadLocal<SimpleDateFormat>() {
+		@Override
+		protected SimpleDateFormat initialValue() {
+			return sdfDay;
+		}
+	};
 
 	/**
 	 * This method handles Webhook request (which comes from api.ai response) and
@@ -57,18 +69,24 @@ public class WeatherService {
 		Date date = determineDate(request);
 
 		// Process Temperature/weather condition related request
-		if (action.equals(IntentConstant.WEATHER_INTENT) || action.equals(IntentConstant.WEATHER_TEMPERATURE_INTENT)) {
+		if (action.equals(UbotConstants.WEATHER_INTENT) || action.equals(UbotConstants.WEATHER_TEMPERATURE_INTENT)) {
 			if (location != null && !location.isEmpty()) {
 				DegreeUnit degreeUnit = getDegreeUnit(request);
 				return getTemperatureResponse(location, date, degreeUnit);
 			}
 		}
 		// Process Activity related intent
-		else if (action.equals(IntentConstant.WEATHER_ACTIVITY_INTENT)) {
+		else if (action.equals(UbotConstants.WEATHER_ACTIVITY_INTENT)) {
 			String activity = getActivity(request);
 			if (activity != null && !activity.isEmpty()) {
 				return getActivityResponse(request, date, activity);
 			}
+		}
+		// Process Condition related intent
+		else if (action.equals(UbotConstants.WEATHER_CONDITION_INTENT)) {
+			String condition = request.getResult().getParameters().getCondition();
+			DegreeUnit degreeUnit = getDegreeUnit(request);
+			return getConditionResponse(location, date, degreeUnit, condition);
 		}
 		return "";
 	}
@@ -103,9 +121,27 @@ public class WeatherService {
 						int highTemp = channel.getItem().getForecasts().get(1).getHigh();
 						int lowTemp = channel.getItem().getForecasts().get(1).getLow();
 						String unitValue = channel.getUnits().getTemperature().name();
-						output = "Tomorrow in " + city + " it will be " + condition + ", expected high of "
-								+ highTemp + " degree " + unitValue.toLowerCase() + " and low of "
-								+ lowTemp + " degree " + unitValue.toLowerCase();
+						output = "Tomorrow in " + city + " it will be " + condition + ", expected high of " + highTemp
+								+ " degree " + unitValue.toLowerCase() + " and low of " + lowTemp + " degree "
+								+ unitValue.toLowerCase();
+					} else {
+						Forecast forecast = channel.getItem().getForecasts().stream()
+								.filter(f -> DateUtils.isSameDay(f.getDate(), date)).collect(Collectors.toList())
+								.get(0);
+						String unitValue = channel.getUnits().getTemperature().name();
+						String condition = forecast.getText();
+						int highTemp = forecast.getHigh();
+						int lowTemp = forecast.getLow();
+						
+						if(!isDateInCurrentWeek(date)) {
+							output = "Next "+ dayFormatter.get().format(date) + " in " + city + " it will be " + condition
+									+ ", expected high of " + highTemp + " degree " + unitValue.toLowerCase()
+									+ " and low of " + lowTemp + " degree " + unitValue.toLowerCase();
+						}else {
+							output = dayFormatter.get().format(date) + " in " + city + " it will be " + condition
+									+ ", expected high of " + highTemp + " degree " + unitValue.toLowerCase()
+									+ " and low of " + lowTemp + " degree " + unitValue.toLowerCase();
+						}
 					}
 				}
 			}
@@ -127,6 +163,27 @@ public class WeatherService {
 
 		return output;
 	}
+	
+	/**
+	 * Get response for weather.activity action, such as rain, snow,
+	 * etc.
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private String getConditionResponse(String location, Date date, DegreeUnit unit, String condition) {
+		String output = "Sorry, I can't predict that for now!";
+		try {
+			Channel channel = yahooWeatherService.getForecastForLocation(location, unit).all().get(0);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return output;
+	}
+	
+	
 
 	/**
 	 * Get degree unit as per the webhook request
@@ -141,7 +198,7 @@ public class WeatherService {
 			String unitCode = request.getResult().getParameters().getUnit();
 			if (StringUtils.isNotBlank(unitCode) && unitCode.equals("F")) {
 				unit = DegreeUnit.FAHRENHEIT;
-			}else  if (StringUtils.isNotBlank(unitCode) && unitCode.equals("C")) {
+			} else if (StringUtils.isNotBlank(unitCode) && unitCode.equals("C")) {
 				unit = DegreeUnit.CELSIUS;
 			}
 		} catch (Exception e) {
@@ -197,9 +254,9 @@ public class WeatherService {
 	private String processRequestToGetCity(WebhookRequest request) {
 		String city = "";
 		try {
-			//Get City
+			// Get City
 			city = request.getResult().getParameters().getAddress().getCity();
-			
+
 			// Default city - Configured
 			if (StringUtils.isBlank(city)) {
 				city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");
@@ -208,5 +265,22 @@ public class WeatherService {
 			log.error("Handle webhook request error {}", e);
 		}
 		return city;
+	}
+	
+	/**
+	 * This method determines, whether the day is in current week or not.
+	 * 
+	 * @param date
+	 * @return true if date is in current week.
+	 */
+	private boolean isDateInCurrentWeek(Date date) {
+		Calendar currentCalendar = Calendar.getInstance();
+		int week = currentCalendar.get(Calendar.WEEK_OF_YEAR);
+		int year = currentCalendar.get(Calendar.YEAR);
+		Calendar targetCalendar = Calendar.getInstance();
+		targetCalendar.setTime(date);
+		int targetWeek = targetCalendar.get(Calendar.WEEK_OF_YEAR);
+		int targetYear = targetCalendar.get(Calendar.YEAR);
+		return week == targetWeek && year == targetYear;
 	}
 }

@@ -13,7 +13,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
-public class DateListDeSerializer extends JsonDeserializer<List<Date>> {
+public class DateListDeserializer extends JsonDeserializer<List<Date>> {
 
 	private static String dateFormatter = "yyyy-MM-dd";
 
@@ -26,7 +26,13 @@ public class DateListDeSerializer extends JsonDeserializer<List<Date>> {
 
 		SimpleDateFormat sdf = new SimpleDateFormat(dateFormatter);
 		List<Date> deserializedDates = new ArrayList<>();
-		List<String> dateList = jp.readValueAs(listType);
+		List<String> dateList = new ArrayList<>();
+		try {
+			dateList = jp.readValueAs(listType);
+		} catch (Exception e) {
+			// not list, then consider it as string
+			dateList.add(jp.readValueAs(String.class));
+		}
 		if (dateList != null && dateList.size() > 0) {
 			for (String value : dateList) {
 				try {
@@ -37,7 +43,6 @@ public class DateListDeSerializer extends JsonDeserializer<List<Date>> {
 			return deserializedDates;
 		}
 		return null;
-
 	}
 
 	public String getDateFormatter() {
@@ -46,7 +51,7 @@ public class DateListDeSerializer extends JsonDeserializer<List<Date>> {
 
 	public void setDateFormatter(String dateFormatter) {
 		if (dateFormatter != null) {
-			DateListDeSerializer.dateFormatter = dateFormatter;
+			DateListDeserializer.dateFormatter = dateFormatter;
 		}
 	}
 

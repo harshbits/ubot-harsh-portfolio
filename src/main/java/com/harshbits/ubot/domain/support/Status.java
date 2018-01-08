@@ -6,8 +6,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,12 +27,10 @@ public class Status implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("code")
-	@Expose
+	@JsonProperty("code")
 	private long code;
 
-	@SerializedName("errorType")
-	@Expose
+	@JsonProperty("errorType")
 	private String errorType;
 
 	public Status withCode(long code) {

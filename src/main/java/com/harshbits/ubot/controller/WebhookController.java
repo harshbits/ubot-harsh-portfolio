@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.harshbits.ubot.constants.IntentConstant;
+import com.harshbits.ubot.constants.UbotConstants;
 import com.harshbits.ubot.domain.WebhookRequest;
 import com.harshbits.ubot.domain.WebhookResponse;
 import com.harshbits.ubot.service.WeatherService;
@@ -51,7 +51,7 @@ public class WebhookController {
 
 		if (action != null) {
 			// For weather related intent processing
-			if (action.startsWith(IntentConstant.WEATHER_INTENT)) {
+			if (action.startsWith(UbotConstants.WEATHER_INTENT)) {
 				responseString = weatherService.handleRequest(request, action);
 			}
 		}

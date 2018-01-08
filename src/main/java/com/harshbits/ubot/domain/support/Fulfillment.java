@@ -6,8 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,20 +27,16 @@ public class Fulfillment implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("speech")
-	@Expose
+	@JsonProperty("speech")
 	private String speech;
 
-	@SerializedName("source")
-	@Expose
+	@JsonProperty("source")
 	private String source;
 
-	@SerializedName("displayText")
-	@Expose
+	@JsonProperty("displayText")
 	private String displayText;
 
-	@SerializedName("messages")
-	@Expose
+	@JsonProperty("messages")
 	private List<Message> messages;
 
 	public Fulfillment withSpeech(String speech) {

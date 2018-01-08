@@ -6,7 +6,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.harshbits.ubot.domain.support.Result;
 import com.harshbits.ubot.domain.support.Status;
 
@@ -29,22 +29,22 @@ public class WebhookRequest implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("id")
+	@JsonProperty("id")
 	private String id;
 
-	@SerializedName("timestamp")
+	@JsonProperty("timestamp")
 	private String timestamp;
 
-	@SerializedName("lang")
+	@JsonProperty("lang")
 	private String lang;
 
-	@SerializedName("result")
+	@JsonProperty("result")
 	private Result result;
 
-	@SerializedName("status")
+	@JsonProperty("status")
 	private Status status;
 
-	@SerializedName("sessionId")
+	@JsonProperty("sessionId")
 	private String sessionId;
 
 }
