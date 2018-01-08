@@ -26,7 +26,7 @@ public class WebhookController {
 	
 	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<?> webhook(@RequestBody WebhookRequest payload) throws Exception {
-
+		
 		WebhookResponse response = new WebhookResponse();
 		try {
 			assignTaskOnIntent(payload, response);

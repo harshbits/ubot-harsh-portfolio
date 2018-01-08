@@ -2,13 +2,17 @@
 package com.harshbits.ubot.domain.support;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.harshbits.ubot.serializer.DateListDeSerializer;
+import com.harshbits.ubot.serializer.DateListSerializer;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,40 +33,30 @@ public class Parameters implements Serializable {
 
 	private final static long serialVersionUID = 1L;
 
-	@SerializedName("address")
-	@Expose
-	private String address;
+	@JsonProperty("date-time.original")
+	private String dateTimeOriginal;
 
-	@SerializedName("date-time")
-	@Expose
-	private List<String> dateTime;
+	@JsonProperty("unit.original")
+	private String unitOriginal;
 
-	@SerializedName("geo-city")
-	@Expose
+	@JsonProperty("unit")
+	private String unit;
+	
+	@JsonProperty("address")
+	private Address address;
+
+	@JsonProperty("geo-city")
 	private String geoCity;
 
-	@SerializedName("unit")
-	@Expose
-	private String unit;
+	@JsonProperty("date-time")
+	@JsonSerialize(using = DateListSerializer.class)
+	@JsonDeserialize(using = DateListDeSerializer.class)
+	private List<Date> dateTime;
 
-	public Parameters withAddress(String address) {
-		this.address = address;
-		return this;
-	}
+	@JsonProperty("geo-city.original")
+	private String geoCityOriginal;
 
-	public Parameters withDateTime(List<String> dateTime) {
-		this.dateTime = dateTime;
-		return this;
-	}
-
-	public Parameters withGeoCity(String geoCity) {
-		this.geoCity = geoCity;
-		return this;
-	}
-
-	public Parameters withUnit(String unit) {
-		this.unit = unit;
-		return this;
-	}
+	@JsonProperty("address.original")
+	private String addressOriginal;
 
 }

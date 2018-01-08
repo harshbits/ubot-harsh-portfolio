@@ -1,11 +1,8 @@
 package com.harshbits.ubot.service;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -17,9 +14,6 @@ import org.springframework.stereotype.Service;
 import com.github.fedy2.weather.YahooWeatherService;
 import com.github.fedy2.weather.data.Channel;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
-import com.google.gson.Gson;
-import com.google.gson.internal.LinkedTreeMap;
-import com.google.gson.reflect.TypeToken;
 import com.harshbits.ubot.constants.IntentConstant;
 import com.harshbits.ubot.domain.WebhookRequest;
 
@@ -37,6 +31,15 @@ public class WeatherService {
 
 	@Autowired
 	private YahooWeatherService yahooWeatherService;
+	
+//	protected static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//	
+//	private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
+//		@Override
+//		protected SimpleDateFormat initialValue() {
+//			return sdf;
+//		}
+//	};
 
 	/**
 	 * This method handles Webhook request (which comes from api.ai response) and
@@ -80,9 +83,7 @@ public class WeatherService {
 	private String getTemperatureResponse(String location, Date date, DegreeUnit unit) {
 		String output = "";
 		// Yahoo weather service has this format as date
-		// SimpleDateFormat targetSdf = new SimpleDateFormat("dd MMM yyyy");
 		try {
-			yahooWeatherService.getForecastForLocation(location, unit).all().get(0).getItem().getForecasts();
 			Channel channel = yahooWeatherService.getForecastForLocation(location, unit).all().get(0);
 
 			if (channel != null) {
@@ -102,8 +103,8 @@ public class WeatherService {
 						int highTemp = channel.getItem().getForecasts().get(1).getHigh();
 						int lowTemp = channel.getItem().getForecasts().get(1).getLow();
 						String unitValue = channel.getUnits().getTemperature().name();
-						output = "Tomorrow in " + city + " it will be " + condition + ", the high temperature will be "
-								+ highTemp + " degree " + unitValue.toLowerCase() + "and  high temperature will be "
+						output = "Tomorrow in " + city + " it will be " + condition + ", expected high of "
+								+ highTemp + " degree " + unitValue.toLowerCase() + " and low of "
 								+ lowTemp + " degree " + unitValue.toLowerCase();
 					}
 				}
@@ -135,13 +136,13 @@ public class WeatherService {
 	 */
 	private DegreeUnit getDegreeUnit(WebhookRequest request) {
 		// Default degree unit to CELSIUS
-		DegreeUnit unit = DegreeUnit.CELSIUS;
+		DegreeUnit unit = DegreeUnit.FAHRENHEIT;
 		try {
-			String unitCode = request.getResult().getParameters().get("unit") != null
-					? request.getResult().getParameters().get("unit").toString()
-					: "";
-			if (!unitCode.isEmpty() && unitCode.equals("F")) {
+			String unitCode = request.getResult().getParameters().getUnit();
+			if (StringUtils.isNotBlank(unitCode) && unitCode.equals("F")) {
 				unit = DegreeUnit.FAHRENHEIT;
+			}else  if (StringUtils.isNotBlank(unitCode) && unitCode.equals("C")) {
+				unit = DegreeUnit.CELSIUS;
 			}
 		} catch (Exception e) {
 			log.error("Get Temperature unit error {}", e.getMessage());
@@ -174,33 +175,16 @@ public class WeatherService {
 	 * @return
 	 */
 	private Date determineDate(WebhookRequest request) {
-		Gson gson = new Gson();
-		Date date = new Date();
-		SimpleDateFormat inputSdf = new SimpleDateFormat("yyyy-mm-dd");
-
 		try {
-			Type type = new TypeToken<List<String>>() {
-			}.getType();
-			String dateString = (String) request.getResult().getContexts().get(0).getParameters().get("date-time");
-			if (dateString != null && !dateString.isEmpty()) {
-				try {
-					List<String> dateArray = gson.fromJson(dateString, type);
-					if (dateArray != null && dateArray.size() > 0) {
-						dateString = dateArray.get(0);
-						date = inputSdf.parse(dateString);
-					}
-				} catch (Exception e) {
-					log.error("Date string is not of type array: {}", e.getMessage());
-					date = inputSdf.parse(dateString);
-				}
+			if (request.getResult().getParameters().getDateTime().get(0) != null) {
+				return request.getResult().getParameters().getDateTime().get(0);
 			} else {
-				date = new Date();
+				return new Date();
 			}
 		} catch (Exception e) {
 			log.error("Get Date string error {}", e.getMessage());
-			date = new Date();
+			return new Date();
 		}
-		return date;
 	}
 
 	/**
@@ -212,21 +196,10 @@ public class WeatherService {
 	 */
 	private String processRequestToGetCity(WebhookRequest request) {
 		String city = "";
-		Gson gson = new Gson();
 		try {
-			Type type = new TypeToken<LinkedTreeMap<String, String>>() {
-			}.getType();
-			LinkedTreeMap<String, String> addressMap = gson
-					.fromJson(request.getResult().getParameters().get("address").toString(), type);
-			if (addressMap != null) {
-				if (addressMap.size() > 0) {
-					city = addressMap.get("city");
-				}
-				// Default city - Configured
-				if (StringUtils.isBlank(city)) {
-					city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");
-				}
-			}
+			//Get City
+			city = request.getResult().getParameters().getAddress().getCity();
+			
 			// Default city - Configured
 			if (StringUtils.isBlank(city)) {
 				city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");

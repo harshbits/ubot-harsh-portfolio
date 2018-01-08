@@ -78,6 +78,13 @@
 			<version>1.6.12</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>4.1</version>
+		</dependency>
+		
+
 		<!-- Yahoo Weather -->
 		<dependency>
 			<groupId>com.github.fedy2</groupId>
