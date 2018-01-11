@@ -33,7 +33,6 @@ public class LocationService {
 		LocationResponse response = new LocationResponse();
 		try {
 			//Default name unknown
-			String cityName = "Unknown";
 			GeocodingResult[] results;
 			//Get Reverse Geocode and Location
 			results = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(request.getLatitude(), request.getLongitude()))
@@ -45,16 +44,22 @@ public class LocationService {
 				for(AddressComponent component : components) {
 					for(AddressComponentType type: component.types) {
 						if(type == AddressComponentType.LOCALITY) {
-							cityName = component.longName;
+							response.setCity(component.longName);
+						}
+						if(type == AddressComponentType.ADMINISTRATIVE_AREA_LEVEL_1) {
+							response.setState(component.longName);
+							response.setStateCode(component.shortName);
+						}
+						if(type == AddressComponentType.COUNTRY) {
+							response.setCountry(component.longName);
+							response.setCountryCode(component.shortName);
 						}
 					}
 				}
 			}
-			response.setCity(cityName);
 			return response;
 		} catch (Exception e) {
 			log.error("Get city name error: {}", e);
-			response.setCity("Unknown");
 			return response;
 		}
 	}

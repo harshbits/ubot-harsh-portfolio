@@ -16,5 +16,13 @@ public class LocationResponse implements Serializable {
 	private final static long serialVersionUID = 1L;
 	
 	private String city;
+	
+	private String state;
+	
+	private String stateCode;
+	
+	private String country;
+	
+	private String countryCode;
 
 }
