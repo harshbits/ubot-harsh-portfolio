@@ -83,7 +83,7 @@
 			<artifactId>opencsv</artifactId>
 			<version>4.1</version>
 		</dependency>
-		
+
 
 		<!-- Yahoo Weather -->
 		<dependency>
@@ -125,6 +125,11 @@
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
 			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.maps</groupId>
+			<artifactId>google-maps-services</artifactId>
+			<version>0.2.6</version>
 		</dependency>
 	</dependencies>
 

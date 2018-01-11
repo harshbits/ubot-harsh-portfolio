@@ -24,7 +24,8 @@ public class WebhookController {
 	@Autowired
 	private WeatherService weatherService;
 	
-	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, headers = "Accept=application/json")
+	@RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE, 
+			consumes = MediaType.APPLICATION_JSON_UTF8_VALUE, headers = "Accept=application/json")
 	public ResponseEntity<?> webhook(@RequestBody WebhookRequest payload) throws Exception {
 		
 		WebhookResponse response = new WebhookResponse();
@@ -43,9 +44,7 @@ public class WebhookController {
 	 * @param response
 	 */
 	private void assignTaskOnIntent(WebhookRequest request, WebhookResponse response) {
-
 		String action = request.getResult().getAction().toLowerCase();
-
 		log.info("Request Action: {}", action);
 		String responseString = "";
 
