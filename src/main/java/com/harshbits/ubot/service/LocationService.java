@@ -1,5 +1,6 @@
 package com.harshbits.ubot.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
@@ -18,6 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class LocationService {
 	
+	@Autowired
+	private GeoApiContext geoApiContext;
+	
 	/**
 	 * This method returns instance of {@link LocationResponse},
 	 * which contains city name.
@@ -30,10 +34,9 @@ public class LocationService {
 		try {
 			//Default name unknown
 			String cityName = "Unknown";
-			GeoApiContext context = new GeoApiContext.Builder().apiKey(System.getenv("location-api-key")).build();
 			GeocodingResult[] results;
 			//Get Reverse Geocode and Location
-			results = GeocodingApi.reverseGeocode(context, new LatLng(request.getLatitude(), request.getLongitude()))
+			results = GeocodingApi.reverseGeocode(geoApiContext, new LatLng(request.getLatitude(), request.getLongitude()))
 					.await();
 			//Address Components
 			AddressComponent[] components = results[0].addressComponents;

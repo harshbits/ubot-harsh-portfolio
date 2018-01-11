@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.github.fedy2.weather.YahooWeatherService;
+import com.google.maps.GeoApiContext;
 import com.harshbits.ubot.config.IntentConfiguration.IgnoreIntents;
 
 import ai.api.AIConfiguration;
@@ -38,5 +39,11 @@ public class ApplicationConfiguration {
 	@Bean
 	public IgnoreIntents ignoreIntents() {
 		return new IgnoreIntents();
+	}
+	
+	@Bean
+	public GeoApiContext geoApiContext() {
+		GeoApiContext context = new GeoApiContext.Builder().apiKey(System.getenv("location-api-key")).build();
+		return context;
 	}
 }
