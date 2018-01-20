@@ -38,6 +38,8 @@ public class UbotMessage implements Serializable {
 	
 	@NotNull(message = "Missing required field type.")
 	private String type;
+	
+	private String city;
 
 	@Valid
 	@NotNull(message = "Missing required field data.")

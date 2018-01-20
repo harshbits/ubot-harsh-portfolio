@@ -24,5 +24,11 @@ public class LocationResponse implements Serializable {
 	private String country;
 	
 	private String countryCode;
+	
+	private Integer temperature;
+	
+	private String unit;
+	
+	private String condition;
 
 }

@@ -1,5 +1,6 @@
 package com.harshbits.ubot.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,9 @@ public class LocationService {
 	
 	@Autowired
 	private GeoApiContext geoApiContext;
+	
+	@Autowired
+	private WeatherService weatherService;
 	
 	/**
 	 * This method returns instance of {@link LocationResponse},
@@ -53,6 +57,11 @@ public class LocationService {
 						if(type == AddressComponentType.COUNTRY) {
 							response.setCountry(component.longName);
 							response.setCountryCode(component.shortName);
+						}
+						
+						// Get weather information
+						if(!StringUtils.isBlank(response.getCity())) {
+							weatherService.getWeatherCondition(response);	
 						}
 					}
 				}

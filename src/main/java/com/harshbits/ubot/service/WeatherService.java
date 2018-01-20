@@ -18,6 +18,7 @@ import com.github.fedy2.weather.data.Channel;
 import com.github.fedy2.weather.data.Forecast;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
 import com.harshbits.ubot.constants.UbotConstants;
+import com.harshbits.ubot.domain.LocationResponse;
 import com.harshbits.ubot.domain.WebhookRequest;
 
 import lombok.extern.slf4j.Slf4j;
@@ -149,6 +150,23 @@ public class WeatherService {
 			log.error("Get temperature error {}", e.getMessage());
 		}
 		return output;
+	}
+	
+	
+	public LocationResponse getWeatherCondition(LocationResponse location) {
+		try {
+			Channel channel = yahooWeatherService.getForecastForLocation(location.getCity(), DegreeUnit.FAHRENHEIT).all().get(0);
+			String condition = channel.getItem().getCondition().getText();
+			int temperature = channel.getItem().getCondition().getTemp();
+			// Unit
+			// String unitValue = channel.getUnits().getTemperature().name();
+			location.setTemperature(temperature);
+			location.setCondition(condition);
+			location.setUnit("F");
+		} catch (Exception e) {
+			log.error("Fetching weather condition error: {}", e);
+		}
+		return location;
 	}
 
 	/**
