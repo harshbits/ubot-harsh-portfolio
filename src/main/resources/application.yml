@@ -21,3 +21,54 @@ http-logging:
     url_patterns: /v1/*
       
 dialog-flow.auth-token: e224271a102548418eac29e794706a44
+
+fontIconMap:
+  0: tornado, wi wi-tornado 2x
+  1: tropical storm, wi wi-sandstorm 2x
+  2: hurricane, wi wi-hurricane 2x
+  3: severe thunderstorms, wi wi-thunderstorm 2x
+  4: thunderstorms, wi wi-thunderstorm 2x
+  5: mixed rain and snow, wi wi-night-snow-thunderstorm 2x
+  6: mixed rain and sleet, wi wi-sleet 2x
+  7: mixed snow and sleet, wi wi-sleet 2x
+  8: freezing drizzle, wi wi-rain-mix 2x
+  9: drizzle, wi wi-rain 2x
+  10: freezing rain, wi-rain-wind 2x
+  11: showers, wi wi-showers 2x
+  12: showers, wi wi-showers 2x
+  13: snow flurries, far fa-snowflake fa-lg
+  14: light snow showers, far fa-snowflake fa-lg
+  15: blowing snow, far fa-snowflake fa-lg
+  16: snow, far fa-snowflake fa-lg
+  17: hail, wi wi-hail 2x
+  18: sleet, wi wi-sleet 2x
+  19: dust, wi wi-dust 2x 
+  20: foggy, wi wi-smoke 2x
+  21: haze, wi wi-day-haze 2x
+  22: smoky, wi wi-smoke 2x
+  23: blustery, wi wi-day-haze 2x 
+  24: windy, wi wi-windy 2x
+  25: cold, wi wi-snow 2x
+  26: cloudy, wi wi-cloud 2x
+  27: mostly cloudy (night), wi wi-night-cloudy 2x
+  28: mostly cloudy (day), wi wi-day-cloudy 2x
+  29: partly cloudy (night), wi wi-night-partly-cloudy 2x
+  30: partly cloudy (day), wi wi-day-cloudy 2x
+  31: clear (night), wi wi-night-clear 2x
+  32: sunny, wi wi-day-sunny 2x
+  33: fair (night), wi wi-night-clear 2x
+  34: fair (day), wi wi-day-sunny 2x
+  35: mixed rain and hail, wi wi-hail 2x
+  36: hot, wi wi-hot 2x
+  37: isolated thunderstorms, wi wi-thunderstorm 2x
+  38: scattered thunderstorms, wi wi-thunderstorm 2x
+  39: scattered thunderstorms, wi wi-thunderstorm 2x
+  40: scattered showers, wi wi-showers 2x
+  41: heavy snow, far fa-snowflake fa-lg
+  42: scattered snow showers, wi wi-day-snow 2x
+  43: heavy snow, far fa-snowflake fa-lg
+  44: partly cloudy, wi wi-cloud 2x
+  45: thundershowers, wi wi-thunderstorm 2x
+  46: snow showers, far fa-snowflake fa-lg
+  47: isolated thundershowers, wi wi-thunderstorm 2x
+  3200: not available, wi wi-thermometer 2x

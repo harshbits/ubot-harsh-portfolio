@@ -11,6 +11,7 @@ import com.google.maps.model.AddressComponent;
 import com.google.maps.model.AddressComponentType;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
+import com.harshbits.ubot.config.FontIconMapper;
 import com.harshbits.ubot.domain.LocationRequest;
 import com.harshbits.ubot.domain.LocationResponse;
 
@@ -25,6 +26,9 @@ public class LocationService {
 	
 	@Autowired
 	private WeatherService weatherService;
+	
+	@Autowired
+	private FontIconMapper fontIconMapper;
 	
 	/**
 	 * This method returns instance of {@link LocationResponse},
@@ -62,6 +66,8 @@ public class LocationService {
 						// Get weather information
 						if(!StringUtils.isBlank(response.getCity())) {
 							weatherService.getWeatherCondition(response);	
+							// Assign icon
+							response.setWeatherIcon(fontIconMapper.getFontIcon(response.getConditionCode()));
 						}
 					}
 				}

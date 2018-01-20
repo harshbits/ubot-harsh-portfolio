@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.github.fedy2.weather.YahooWeatherService;
 import com.github.fedy2.weather.data.Channel;
+import com.github.fedy2.weather.data.Condition;
 import com.github.fedy2.weather.data.Forecast;
 import com.github.fedy2.weather.data.unit.DegreeUnit;
 import com.harshbits.ubot.constants.UbotConstants;
@@ -155,13 +156,15 @@ public class WeatherService {
 	
 	public LocationResponse getWeatherCondition(LocationResponse location) {
 		try {
-			Channel channel = yahooWeatherService.getForecastForLocation(location.getCity(), DegreeUnit.FAHRENHEIT).all().get(0);
-			String condition = channel.getItem().getCondition().getText();
+			String loc = location.getCity() + ", " + location.getStateCode();
+			Channel channel = yahooWeatherService.getForecastForLocation(loc, DegreeUnit.FAHRENHEIT).all().get(0);
+			Condition condition = channel.getItem().getCondition();
 			int temperature = channel.getItem().getCondition().getTemp();
 			// Unit
 			// String unitValue = channel.getUnits().getTemperature().name();
 			location.setTemperature(temperature);
-			location.setCondition(condition);
+			location.setCondition(condition.getText());
+			location.setConditionCode(condition.getCode());
 			location.setUnit("F");
 		} catch (Exception e) {
 			log.error("Fetching weather condition error: {}", e);

@@ -30,5 +30,9 @@ public class LocationResponse implements Serializable {
 	private String unit;
 	
 	private String condition;
+	
+	private int conditionCode;
+	
+	private String weatherIcon;
 
 }
