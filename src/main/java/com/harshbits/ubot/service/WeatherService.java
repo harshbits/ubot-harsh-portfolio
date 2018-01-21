@@ -41,13 +41,6 @@ public class WeatherService {
 	
 	protected static final SimpleDateFormat sdfDay = new SimpleDateFormat("EEEE");
 
-//	private static final ThreadLocal<SimpleDateFormat> formatter = new ThreadLocal<SimpleDateFormat>() {
-//		@Override
-//		protected SimpleDateFormat initialValue() {
-//			return sdf;
-//		}
-//	};
-	
 	private static final ThreadLocal<SimpleDateFormat> dayFormatter = new ThreadLocal<SimpleDateFormat>() {
 		@Override
 		protected SimpleDateFormat initialValue() {
@@ -195,7 +188,7 @@ public class WeatherService {
 	private String getConditionResponse(String location, Date date, DegreeUnit unit, String condition) {
 		String output = "Sorry, I can't predict that for now!";
 		try {
-			Channel channel = yahooWeatherService.getForecastForLocation(location, unit).all().get(0);
+//			Channel channel = yahooWeatherService.getForecastForLocation(location, unit).all().get(0);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -276,12 +269,12 @@ public class WeatherService {
 		String city = "";
 		try {
 			// Get City
-			city = request.getResult().getParameters().getAddress().getCity();
+//			city = request.getResult().getParameters().getAddress().getCity();
 
 			// Default city - Configured
-			if (StringUtils.isBlank(city)) {
+//			if (StringUtils.isBlank(city)) {
 				city = (String) request.getResult().getContexts().get(0).getParameters().get("geo-city");
-			}
+//			}
 		} catch (Exception e) {
 			log.error("Handle webhook request error {}", e);
 		}

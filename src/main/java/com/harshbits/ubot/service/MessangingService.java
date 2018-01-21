@@ -29,9 +29,6 @@ public class MessangingService {
 	@Autowired
 	private AIDataService dataService;
 
-	// @Autowired
-	// private IgnoreIntents ignoreIntents;
-
 	public UbotMessage processMessage(UbotMessage request) {
 
 		UbotMessage response = new UbotMessage();
@@ -41,30 +38,19 @@ public class MessangingService {
 
 		// Prepare AIRequest
 		AIRequest aiRequest = new AIRequest(request.getData().getText());
-		aiRequest.setLocation(new Location(40.7128, 74.0060));
-//		
-//		
+		aiRequest.setLocation(new Location(request.getLatitude(), request.getLongitude()));
 		List<AIContext> contexts = new ArrayList<>();
 		AIContext context = new AIContext();
 		context.setName("weather");
 		Map<String, String> parameters = new HashMap<>();
-//		parameters.put("geo-city", "new york");
-		parameters.put("location", "new york");
-//		parameters.put("address.original", "new york");
-//		parameters.put("address", "{\n" + 
-//				"        \"city\": \"New York\"\n" + 
-//				"      }");
+		parameters.put("location", request.getCity());
 		context.setParameters(parameters);
 		contexts.add(context);
 		aiRequest.setContexts(contexts);
-//		
 		aiRequest.addContext(context);
 		try {
-//			AIServiceContext customContext = AIServiceContextBuilder.buildFromSessionId("customSessionId");
-			
-			
 			RequestExtras extras = new RequestExtras();
-			extras.setLocation(new Location(40.7128, 74.0060));
+			extras.setLocation(new Location(request.getLatitude(), request.getLongitude()));
 			extras.setContexts(contexts);
 			
 			AIResponse aiResponse = dataService.request(aiRequest, extras);

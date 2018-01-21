@@ -40,6 +40,10 @@ public class UbotMessage implements Serializable {
 	private String type;
 	
 	private String city;
+	
+	private double latitude;
+	
+	private double longitude;
 
 	@Valid
 	@NotNull(message = "Missing required field data.")
