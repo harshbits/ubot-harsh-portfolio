@@ -5,7 +5,7 @@
 
 	<groupId>com.harshbits</groupId>
 	<artifactId>ubot-harsh-portfolio</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1.RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>ubot-harsh-portfolio</name>
